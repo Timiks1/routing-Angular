@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { forkJoin } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { SharedService } from '../shared.service';
 
 interface Asteroid {
   id: string;
@@ -35,11 +36,12 @@ export class SecondComponent {
   public asteroidData: Asteroid[] = [];
   public isFetchingImages: boolean = true;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private sharedService: SharedService) {
+  }
 
   ngOnInit() {
     this.http
-      .get('https://api.nasa.gov/neo/rest/v1/feed?start_date=2015-09-07&end_date=2015-09-08&api_key=AbnXhIuJIedy22Mu18fd2qZDuc3yBcBFg7Ek1Bu2&count=100')
+      .get(`https://api.nasa.gov/neo/rest/v1/feed?start_date=2015-09-07&end_date=2015-09-08&api_key=${this.sharedService.key}&count=100`)
       .subscribe((data: any) => {
         console.log(data)
         const response: any = data;

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-
+import { SharedService } from '../shared.service';
+// AbnXhIuJIedy22Mu18fd2qZDuc3yBcBFg7Ek1Bu2
 @Component({
   selector: 'app-first',
   templateUrl: './first.component.html',
@@ -10,15 +11,20 @@ export class FirstComponent {
   public nasa!: Nasa[];
   public currentIndex: number = 0;
   public urls! : string[];
-  constructor(private http: HttpClient) {
+  public componentOpened: boolean = false; // Флаг, указывающий, что компонент открыт
+
+  constructor(private http: HttpClient, private sharedService: SharedService) {
     this.urls = [];
   }
   ngOnInit() {
-    this.http.get('https://api.nasa.gov/planetary/apod?api_key=AbnXhIuJIedy22Mu18fd2qZDuc3yBcBFg7Ek1Bu2&count=100')
+   
+
+    this.http.get(`https://api.nasa.gov/planetary/apod?api_key=${this.sharedService.key}&count=10`)
       .subscribe(data => {
         let temp: string = JSON.stringify(data);
         this.nasa = JSON.parse(temp);
       });
+    
   }
 
   public nextImage() {
@@ -49,6 +55,7 @@ export class FirstComponent {
    });
    
   }
+  
 }
 
 export class Nasa {

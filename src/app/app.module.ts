@@ -10,6 +10,7 @@ import { SecondComponent } from './second/second.component';
 import { ThirdComponent } from './third/third.component';
 import { FourthComponent } from './fourth/fourth.component';
 import { FifthComponent } from './fifth/fifth.component';
+import { SixComponent } from './six/six.component';
 
 @NgModule({
   declarations: [
@@ -19,6 +20,7 @@ import { FifthComponent } from './fifth/fifth.component';
     ThirdComponent,
     FourthComponent,
     FifthComponent,
+    SixComponent,
   ],
   imports: [
     BrowserModule,

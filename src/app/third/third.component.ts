@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { SharedService } from '../shared.service';
 
 @Component({
   selector: 'app-third',
@@ -6,42 +8,63 @@ import { Component } from '@angular/core';
   styleUrls: ['./third.component.css']
 })
 export class ThirdComponent {
-  dob: string = '';
-  horoscope: string = '';
+  public nasa!: ImageResponse;
+  public currentIndex: number = 0;
+  public urls! : string[];
+  public day : number = 1;
 
-  getHoroscope() {
-    // Get the month and day from the date of birth
-    const date = new Date(this.dob);
-    const month = date.getMonth() + 1;
-    const day = date.getDate();
-
-    // Determine the horoscope based on the month and day
-    if ((month == 3 && day >= 21) || (month == 4 && day <= 19)) {
-      this.horoscope = 'Aries';
-    } else if ((month == 4 && day >= 20) || (month == 5 && day <= 20)) {
-      this.horoscope = 'Taurus';
-    } else if ((month == 5 && day >= 21) || (month == 6 && day <= 20)) {
-      this.horoscope = 'Gemini';
-    } else if ((month == 6 && day >= 21) || (month == 7 && day <= 22)) {
-      this.horoscope = 'Cancer';
-    } else if ((month == 7 && day >= 23) || (month == 8 && day <= 22)) {
-      this.horoscope = 'Leo';
-    } else if ((month == 8 && day >= 23) || (month == 9 && day <= 22)) {
-      this.horoscope = 'Virgo';
-    } else if ((month == 9 && day >= 23) || (month == 10 && day <= 22)) {
-      this.horoscope = 'Libra';
-    } else if ((month == 10 && day >= 23) || (month == 11 && day <= 21)) {
-      this.horoscope = 'Scorpio';
-    } else if ((month == 11 && day >= 22) || (month == 12 && day <= 21)) {
-      this.horoscope = 'Sagittarius';
-    } else if ((month == 12 && day >= 22) || (month == 1 && day <= 21)){
-      this.horoscope = 'Sagittarius';
-    }else if ((month == 12 && day >= 22) || (month == 1 && day <= 19)) {
-      this.horoscope = 'Capricorn';
-      } else if ((month == 1 && day >= 20) || (month == 2 && day <= 18)) {
-      this.horoscope = 'Aquarius';
-      } else if ((month == 2 && day >= 19) || (month == 3 && day <= 20)) {
-      this.horoscope = 'Pisces';
-      }
+  constructor(private http: HttpClient, private sharedService: SharedService) {
+    this.urls = [];
   }
+  ngOnInit() {
+    this.http.get(`https://api.nasa.gov/planetary/earth/assets?lon=-95.33&lat=29.78&date=2020-${this.day}-11&&dim=0.10&api_key=${this.sharedService.key}`)
+      .subscribe(data => {
+       
+        let temp: string = JSON.stringify(data);
+        this.nasa = JSON.parse(temp);
+      });
+  }
+
+  public nextImage() {
+    this.day++;
+    this.http.get(`https://api.nasa.gov/planetary/earth/assets?lon=-95.33&lat=29.78&date=2020-${this.day}-11&&dim=0.10&api_key=${this.sharedService.key}`)
+      .subscribe(data => {
+        console.log(data); // Отладочный вывод
+        let temp: string = JSON.stringify(data);
+        this.nasa = JSON.parse(temp);
+      });
+  }
+  
+   
+  
+  public lastImage() {
+    this.day--;
+    this.http.get(`https://api.nasa.gov/planetary/earth/assets?lon=-95.33&lat=29.78&date=2020-${this.day}-11&&dim=0.10&api_key=${this.sharedService.key}`)
+      .subscribe(data => {
+        console.log(data); // Отладочный вывод
+        let temp: string = JSON.stringify(data);
+        this.nasa = JSON.parse(temp);
+      });
+  }
+  // public showCopyright() {
+  //   this.urls = [];
+  //  this.nasa.forEach(element => {
+  //    if(element.copyright == this.nasa[this.currentIndex].copyright){
+  //       this.urls.push(element.hdurl);
+  //    }
+  //  });
+   
+  // }
 }
+
+interface ImageResponse {
+  date: string;
+  id: string;
+  resource: {
+    dataset: string;
+    planet: string;
+  };
+   service_version: string;
+    url: string;
+}
+ 
