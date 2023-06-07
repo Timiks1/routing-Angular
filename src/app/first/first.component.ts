@@ -11,7 +11,7 @@ export class FirstComponent {
   public nasa!: Nasa[];
   public currentIndex: number = 0;
   public urls! : string[];
-  public componentOpened: boolean = false; // Флаг, указывающий, что компонент открыт
+  public componentOpened: boolean = false; 
 
   constructor(private http: HttpClient, private sharedService: SharedService) {
     this.urls = [];
@@ -19,7 +19,7 @@ export class FirstComponent {
   ngOnInit() {
    
 
-    this.http.get(`https://api.nasa.gov/planetary/apod?api_key=${this.sharedService.key}&count=10`)
+    this.http.get(`https://api.nasa.gov/planetary/apod?api_key=${this.sharedService.key}`)
       .subscribe(data => {
         let temp: string = JSON.stringify(data);
         this.nasa = JSON.parse(temp);

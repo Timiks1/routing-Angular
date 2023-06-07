@@ -13,7 +13,9 @@ export class SixComponent {
   saveInput() {
     console.log(this.inputValue);
     this.sharedService.key= this.inputValue;
-    this.sharedService.acess =true;
+    if(this.sharedService.key != ''){
+   this.sharedService.Change();
+    }
   }
   openLink() {
     const url = 'https://api.nasa.gov'; // Замените ссылку на нужную
