@@ -8,13 +8,16 @@ import { SharedService } from '../shared.service';
 })
 export class SixComponent {
   inputValue: string = '';
-  constructor(private sharedService: SharedService) { }
+  constructor(public sharedService: SharedService) { }
 
   saveInput() {
     console.log(this.inputValue);
     this.sharedService.key= this.inputValue;
-    if(this.sharedService.key != ''){
+    if(this.sharedService.key != '' && this.sharedService.acess == false){
    this.sharedService.Change();
+    }
+    else{
+      this.sharedService.LogOut();
     }
   }
   openLink() {
